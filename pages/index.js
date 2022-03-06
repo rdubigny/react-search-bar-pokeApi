@@ -22,11 +22,9 @@ export default function Home() {
       try {
         const response = await fetchPokemon(query);
         const results = await response.json();
-        console.log(response);
         setPokemon(results);
         setLoading(false);
       } catch (err) {
-        console.log(err);
         setLoading(false);
         setError(true);
         setErrorMsg('Pokemon not found.')

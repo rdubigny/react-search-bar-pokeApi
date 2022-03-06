@@ -4,6 +4,6 @@ const query = {
 }
 
 export async function fetchPokemon(pokemon) {
-    console.log(`${baseUrl}/${query.pokemon}/${pokemon}`);
+    console.warn('fetching');
     return fetch(`${baseUrl}/${query.pokemon}/${pokemon}`);
 }
