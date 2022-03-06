@@ -10,7 +10,7 @@ export default function Search(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault(); //prevent reload normal behavior from browser
-        props.getPokemon(search);
+        props.getPokemon(search.toLocaleLowerCase());
     }
     return (<>
         <Form onSubmit={handleSubmit}>
