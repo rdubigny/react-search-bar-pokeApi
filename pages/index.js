@@ -3,6 +3,7 @@ import Search from '../components/Search';
 import { fetchPokemon } from "../services/getPokemon";
 import PokemonData from "../components/PokemonData"
 import Alert from 'react-bootstrap';
+import {debounce} from "lodash/function";
 
 export default function Home() {
   const [pokemon, setPokemon] = useState();
@@ -18,7 +19,7 @@ export default function Home() {
     }
     setError(false);
     setLoading(true);
-    setTimeout(async () => {
+
       try {
         const response = await fetchPokemon(query);
         const results = await response.json();
@@ -27,25 +28,26 @@ export default function Home() {
       } catch (err) {
         setLoading(false);
         setError(true);
+        setPokemon(null);
         setErrorMsg('Pokemon not found.')
       }
-    }, 1500);
   }
 
+  const debouncedGetPokemon = debounce(getPokemon, 200)
+
   return (<>
-    {error ? (<span>
-      {errorMsg}
-    </span>) : null}
-    <Search getPokemon={getPokemon} />
+
+    <Search getPokemon={debouncedGetPokemon} />
     {loading ? (<p>loading...</p>) : null}
-    {!loading && pokemon ? (
+    {!loading && pokemon && (
       <PokemonData
-        name={pokemon.name}
-        sprites={pokemon.sprites.front_default}
-        abilities={pokemon.abilities}
-        stats={pokemon.stats}
-        types={pokemon.types}
+      name={pokemon.name}
+      sprites={pokemon.sprites.front_default}
+      abilities={pokemon.abilities}
+      stats={pokemon.stats}
+      types={pokemon.types}
       />
-    ) : null}
+      )}
+    {error && <span>{errorMsg}</span>}
   </>);
 }
